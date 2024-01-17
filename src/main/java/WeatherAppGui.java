@@ -8,9 +8,11 @@ public class WeatherAppGui extends JFrame {
 
         // Configure GUI to end the program's process once it has been closed
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(null);
 
         // Set the size of the GUI (Px)
         setSize(450, 650);
+        setResizable(false);
 
         // Load the GUI at the center of the screen
         setLocationRelativeTo(null);
@@ -27,7 +29,6 @@ public class WeatherAppGui extends JFrame {
         JTextField searchTextField = new JTextField();
 
         // Set the location and size of the component
-        searchTextField.setLayout(null);
         searchTextField.setBounds(15, 15, 351, 45);
 
         // Change the font style and size
