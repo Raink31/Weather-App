@@ -4,20 +4,27 @@ import org.json.simple.parser.JSONParser;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 // Retrieve Weather data from API. The GUI will display this data to the user.
 public class WeatherApp {
+    private static final Logger logger = LoggerFactory.getLogger(WeatherApp.class);
     // Fetch weather data for given location
     public static JSONObject getWeatherData(String locationName) {
         // Get location coordinates using the geolocation API
         JSONArray locationData = getLocationData(locationName);
 
         // Extract latitude and longitude data
-        JSONObject location = (JSONObject) locationData.get(0);
+        assert locationData != null;
+        JSONObject location = (JSONObject) locationData.getFirst();
         double latitude = (double) location.get("latitude");
         double longitude = (double) location.get("longitude");
 
@@ -31,6 +38,7 @@ public class WeatherApp {
             HttpURLConnection conn = fetchAPIResponse(urlString);
 
             // Check for response status - 200 = OK
+            assert conn != null;
             if (conn.getResponseCode() != 200) {
                 System.out.println("Error: Could not connect to the API");
                 return null;
@@ -87,7 +95,7 @@ public class WeatherApp {
             return weatherData;
 
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred.", e);
         }
 
         return null;
@@ -106,6 +114,7 @@ public class WeatherApp {
             HttpURLConnection conn = fetchAPIResponse(urlString);
 
             // Check response status 200 = OK
+            assert conn != null;
             if (conn.getResponseCode() != 200) {
                 System.out.println("Error: Could not connect to API");
                 return null;
@@ -130,12 +139,11 @@ public class WeatherApp {
                 JSONObject resultsJsonObj = (JSONObject) parser.parse(String.valueOf(resultJSon));
 
                 // Get the list of location data the API generated from the location name
-                JSONArray locationData = (JSONArray) resultsJsonObj.get("results");
-                return locationData;
+                return (JSONArray) resultsJsonObj.get("results");
             }
 
         } catch(Exception e) {
-            e.printStackTrace();
+            logger.error("An error occurred.", e);
         }
 
         // Couldn't find location
@@ -145,7 +153,8 @@ public class WeatherApp {
     private static HttpURLConnection fetchAPIResponse(String urlString) {
         try {
             // Attempt to create connection
-            URL url = new URL(urlString);
+            URI uri = new URI(urlString);
+            URL url = uri.toURL();
             HttpURLConnection conn = (HttpURLConnection)  url.openConnection();
 
             // Set request method to get
@@ -155,7 +164,9 @@ public class WeatherApp {
             conn.connect();
             return conn;
         } catch(IOException e) {
-            e.printStackTrace();
+            logger.error("An error occurred.", e);
+        } catch (URISyntaxException e) {
+            throw new RuntimeException(e);
         }
 
         // Could not make connection
@@ -185,9 +196,8 @@ public class WeatherApp {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH':00'");
 
         // Format and print the current date and time
-        String formattedDateTime = currentDateTime.format(formatter);
 
-        return formattedDateTime;
+        return currentDateTime.format(formatter);
     }
 
     // Convert the weather code into readable text : See WMO Weather interpretation codes
