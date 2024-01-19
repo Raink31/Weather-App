@@ -173,8 +173,8 @@ public class WeatherApp {
         return null;
     }
 
-    private static int findIndexOfCurrentTime(JSONArray timelist) {
-        String currentTime = getCurrentTime();
+    public static int findIndexOfCurrentTime(JSONArray timelist) {
+        String currentTime = getCurrentTime(LocalDateTime.now());
 
         /// Iterate through the time list and see which one match the current time
         for (int i = 0; i < timelist.size(); i++) {
@@ -188,20 +188,18 @@ public class WeatherApp {
         return 0;
     }
 
-    public static String getCurrentTime() {
-        // Get current date and time
-        LocalDateTime currentDateTime = LocalDateTime.now();
+    public static String getCurrentTime(LocalDateTime localDateTime) {
 
         // Format date to be 2024-01-18T00:00 (How it is read on the API)
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH':00'");
 
         // Format and print the current date and time
 
-        return currentDateTime.format(formatter);
+        return localDateTime.format(formatter);
     }
 
     // Convert the weather code into readable text : See WMO Weather interpretation codes
-    private static String convertWeatherCode(long weatherCode) {
+    public static String convertWeatherCode(long weatherCode) {
         String weatherCondition = "";
         if (weatherCode == 0L) {
             // Clear
