@@ -3,12 +3,12 @@
 ## Screenshot
 
 ### Mobile Screenshot
-![App screenshot](./src/main/assets/app_screenshot.png)
+![App screenshot](./src/main/assets/app_screenshot.PNG)
 
 
 ## Description
 
-This a simple Weather application using Geocoding API : https://open-meteo.com/en/docs/geocoding-api#name=londre and Weather forecast API : https://open-meteo.com/en/docs. It has been built with the help of a YouTube Tutorial, link below.
+This a simple Weather application using <a href="https://open-meteo.com/en/docs/geocoding-api#name=londre" target="_blank">Geocoding API</a> and <a href="https://open-meteo.com/en/docs" target="_blank">Weather forecast API</a>. It has been built with the help of a YouTube Tutorial, link below.
 
 ## Links
 
